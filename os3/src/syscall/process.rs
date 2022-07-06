@@ -29,12 +29,11 @@ pub fn sys_get_time(ts: *mut TimeVal, _tz: usize) -> isize {
 
 pub fn sys_task_info(ti: *mut TaskInfo) -> isize {
     let cur_tcb = get_cur_task_info();
-    println!("++++++{:?}", cur_tcb);
     unsafe {
         *ti = TaskInfo{
             status: cur_tcb.task_status,
-            syscall_times: cur_tcb.stats.syscall_times,
-            time: get_time() - cur_tcb.stats.first_run_time,
+            syscall_times: cur_tcb.stats.syscall_times.clone(),
+            time: (get_time_us() - cur_tcb.stats.first_run_time) / 1000,
         };
     }
     0

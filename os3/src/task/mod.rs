@@ -17,7 +17,7 @@ use task::TaskControlBlock;
 
 use crate::config::MAX_APP_NUM;
 
-use crate::timer::get_time;
+use crate::timer::get_time_us;
 
 pub struct TaskManager {
     num_app: usize,
@@ -72,7 +72,7 @@ impl TaskManager {
 
             // do statistic
             if inner.tasks[current].stats.first_run_time == 0 {
-                inner.tasks[current].stats.first_run_time = get_time();
+                inner.tasks[current].stats.first_run_time = get_time_us();
             }
             
             drop(inner);
@@ -102,7 +102,6 @@ impl TaskManager {
         let inner = self.inner.exclusive_access();
         let current = inner.current_task;
         let t = inner.tasks[current];
-        println!("===={:?}", t);
         t
     }
 
